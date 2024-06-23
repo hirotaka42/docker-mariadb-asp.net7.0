@@ -1,33 +1,31 @@
 services:
-  # bff:
-  #   image: bff
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.bff
-  #   ports:
-  #     - "5200:5200"
-  #   volumes:
-  #           - ./config:/app-config
-  #           - ./data:/app-data
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://+:5200
-  #   depends_on:
-  #           - mysql
-  #   networks:
-  #     - my-bff-network
-  #   restart: always
-  #   logging:
-  #       driver: json-file
-  #       options:
-  #           max-file: "1"
-  #           max-size: 10m
+  bff:
+    image: bff
+    build:
+      context: .
+      dockerfile: Dockerfile.bff
+    ports:
+      - "5200:5200"
+    volumes:
+            - ./config:/app-config
+            - ./data:/app-data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5200
+    depends_on:
+            - mysql
+    restart: always
+    logging:
+        driver: json-file
+        options:
+            max-file: "1"
+            max-size: 10m
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 5300:8080
     depends_on:
           - mysql
 
