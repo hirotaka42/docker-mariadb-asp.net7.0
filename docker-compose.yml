@@ -6,11 +6,16 @@ services:
       dockerfile: Dockerfile.bff
     ports:
       - "5200:5200"
+    volumes:
+            - ./config:/app-config
+            - ./data:/app-data
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5200
     depends_on:
             - mysql
+    networks:
+      - my-bff-network
     restart: always
     logging:
         driver: json-file
@@ -23,6 +28,8 @@ services:
     # image: mysql:8.0 # 囲み文字を使用する場合
     volumes:
         - mysql-db:/var/lib/mysql
+    networks:
+      - my-bff-network
     environment:
         MYSQL_USER: xiaotvappbff
         MYSQL_PASSWORD: xiaotvappbff
@@ -40,3 +47,8 @@ services:
 volumes:
     mysql-db:
         driver: local
+
+
+networks:
+  my-bff-network:
+    driver: bridge

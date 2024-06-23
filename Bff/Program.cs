@@ -7,7 +7,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// DbContext の登録
+builder.Services.AddDbContext<StreamingUrlsContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 var app = builder.Build();
+
+// CORS ポリシーの適用
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
