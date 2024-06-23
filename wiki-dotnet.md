@@ -64,3 +64,18 @@ dotnet aspnetcore-codegenerator controller \
 - `--databaseProvider Pomelo.EntityFrameworkCore.MySql`: データベースプロバイダーとして Pomelo.EntityFrameworkCore.MySql を使用するように指定
 
 このコマンドを実行すると、同じ内容のスキャフォールディングが行われ、./Controllers/ProductController.cs にファイルが生成される
+
+
+
+
+# 起動
+
+1. DBアップデート(作成済みなら、なくてもいい)
+```
+dotnet ef database update
+```
+
+2. プロジェクト起動 (watchを入れるとログが見れる)
+```
+dotnet watch run --project Bff.csproj
+```

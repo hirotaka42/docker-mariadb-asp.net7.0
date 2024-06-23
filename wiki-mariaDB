@@ -68,3 +68,82 @@ http://localhost:8080/
 |docker network ls |ネットーワークの一覧|
 |docker network inspect {ネットーワークの名}|ネットーワークの詳細 |
 |docker-compose exec {サービス名} env| コンテナの環境変数取得 |
+
+
+
+# 勘どころ(困った時に)
+
+### ネットワーク設定
+
+#### MariaDBの設定確認:
+コンテナ内で以下のコマンドを実行し、bind-address の設定を確認
+Docker外部からアクセスするために、`bind-address = 0.0.0.0` となっていることを確認
+
+```
+docker exec -it docker-mariadb-aspnet80-mysql-1 grep bind-address /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+
+#### 編集する場合
+
+置換と目視での確認
+
+コンテナにアクセス
+```
+docker exec -it docker-mariadb-aspnet80-mysql-1 bash
+```
+
+コンテナ内部で実施
+```
+# 置換
+root@3665afbd591f:/# sed -i 's/^#bind-address.*$/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
+# 確認
+root@3665afbd591f:/# cat /etc/mysql/mariadb.conf.d/50-server.cnf
+# 確認
+root@3665afbd591f:/# grep bind-address /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+
+### Docker外のネットワークからログインできるか確認
+
+#### できないもの
+
+```
+mysql -h 127.0.0.1 -P 3306 -u root -p
+mysql -h 127.0.0.1 -P 3306 -u ユーザー名 -p
+
+mysql -h localhost -P 3306 -u root -p
+mysql -h localhost -P 3306 -u ユーザー名 -p
+```
+
+#### できるもの
+##### Docker外部からの接続
+ipアドレスはホストのipを設定する
+PCにmysqlコマンドが使える状態なら、下記で確認できる
+```
+mysql -h 192.168.10.11 -P 3306 -u xiaobff -p
+mysql -h 192.168.10.11 -P 3306 -u root -p
+
+```
+
+スマホから見たい場合は、コンテナで起動している`Adminer`を使用し、`192.168.10.11:8080`で、上記の情報を使用しDBのアクセスチェックも可能
+
+##### Docker内からの接続
+Dockerコンテナにアクセス
+```
+docker exec -it docker-mariadb-aspnet80-mysql-1 bash
+```
+
+コンテナ内で実施
+```
+mysql -u xiaobff -p 
+mysql -u root -p
+
+```
+↓
+```
+# こんな感じ
+root@acbde57c4e83:/# mysql -u xiaobff -p
+root@acbde57c4e83:/# mysql -u root -p
+```
+
+
+
