@@ -1,4 +1,7 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Bff.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -7,9 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//// DbContext の登録
+//builder.Services.AddDbContext<ProductContext>(options =>
+//    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection")));
 // DbContext の登録
-builder.Services.AddDbContext<StreamingUrlsContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ProductContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("MariaDbContext"), new MySqlServerVersion(new Version(10, 5))));
+
 
 var app = builder.Build();
 

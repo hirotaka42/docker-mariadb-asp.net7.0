@@ -1,40 +1,39 @@
 services:
-  bff:
-    image: bff
-    build:
-      context: .
-      dockerfile: Dockerfile.bff
-    ports:
-      - "5200:5200"
-    volumes:
-            - ./config:/app-config
-            - ./data:/app-data
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5200
-    depends_on:
-            - mysql
-    networks:
-      - my-bff-network
-    restart: always
-    logging:
-        driver: json-file
-        options:
-            max-file: "1"
-            max-size: 10m
+  # bff:
+  #   image: bff
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.bff
+  #   ports:
+  #     - "5200:5200"
+  #   volumes:
+  #           - ./config:/app-config
+  #           - ./data:/app-data
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://+:5200
+  #   depends_on:
+  #           - mysql
+  #   networks:
+  #     - my-bff-network
+  #   restart: always
+  #   logging:
+  #       driver: json-file
+  #       options:
+  #           max-file: "1"
+  #           max-size: 10m
 
   mysql:
     image: mariadb:10.5
     # image: mysql:8.0 # 囲み文字を使用する場合
     volumes:
         - mysql-db:/var/lib/mysql
-    networks:
-      - my-bff-network
+    ports:
+        - "3306:3306"
     environment:
-        MYSQL_USER: xiaotvappbff
-        MYSQL_PASSWORD: xiaotvappbff
-        MYSQL_ROOT_PASSWORD: xiaotvappbff
-        MYSQL_DATABASE: xiaotvappbff
+        MYSQL_USER: xiaobff
+        MYSQL_PASSWORD: xiaobff
+        MYSQL_DATABASE: xiaobff
         TZ: "Asia/Tokyo"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --performance-schema=false --expire_logs_days=1 # for mariadb
     # command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_as_ci --performance-schema=false --expire_logs_days=1 --default-authentication-plugin=mysql_native_password # for myql
@@ -49,6 +48,3 @@ volumes:
         driver: local
 
 
-networks:
-  my-bff-network:
-    driver: bridge
