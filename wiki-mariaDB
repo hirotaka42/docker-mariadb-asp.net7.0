@@ -1,0 +1,70 @@
+
+
+
+```
+❯ docker network inspect docker-mariadb-aspnet80_default
+[
+    {
+        "Name": "docker-mariadb-aspnet80_default",
+        "Id": "8d9eb4597a2fdf151a1b1ac3bc372e239497b983da682023339bfb755893d5fe",
+        "Created": "2024-06-23T20:07:15.112369222+09:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.29.0.0/16",
+                    "Gateway": "172.29.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "1e9e82fde338306f7332e06886f91f76f4a5feb88fddb70e2576a5dc8a5bfe9f": {
+                "Name": "docker-mariadb-aspnet80-mysql-1",
+                "EndpointID": "723aceffe96400516a2cb4b9a4dadfe1e016d50ab494d49a41b44860f1c56470",
+                "MacAddress": "02:42:ac:1d:00:02",
+                "IPv4Address": "172.29.0.2/16",
+                "IPv6Address": ""
+            },
+            "34957a7583e377d36a3b2d7a0ffcd751d9511c04f4f52b78b18d73ffcdd4f91c": {
+                "Name": "docker-mariadb-aspnet80-adminer-1",
+                "EndpointID": "cc203d92e25037ba65776f2460df8b4ecb1133ae30f25d38de7beaa0611c9337",
+                "MacAddress": "02:42:ac:1d:00:03",
+                "IPv4Address": "172.29.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "default",
+            "com.docker.compose.project": "docker-mariadb-aspnet80",
+            "com.docker.compose.version": "2.27.1"
+        }
+    }
+]
+```
+
+`docker-mariadb-aspnet80-mysql-1`コンテナのIPに対してAdminerを使用し、ログインできるか確認
+```
+http://localhost:8080/
+
+# 例
+# http://localhost:8080/?server=172.29.0.2&username=xiaobff&db=xiaobff
+```
+
+
+|コマンド|概要|
+|-- | --|
+|docker network ls |ネットーワークの一覧|
+|docker network inspect {ネットーワークの名}|ネットーワークの詳細 |
+|docker-compose exec {サービス名} env| コンテナの環境変数取得 |

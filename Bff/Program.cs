@@ -11,12 +11,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //// DbContext の登録
-//builder.Services.AddDbContext<ProductContext>(options =>
-//    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection")));
-// DbContext の登録
 builder.Services.AddDbContext<ProductContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("MariaDbContext"), new MySqlServerVersion(new Version(10, 5))));
-
+{
+    var connectionString = builder.Configuration.GetConnectionString("MariaDbContext");
+    options.UseMySql(connectionString, 
+        new MySqlServerVersion(new Version(10, 5, 25)),
+        mySqlOptions =>
+        {
+            mySqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        })
+    .EnableSensitiveDataLogging()
+    .EnableDetailedErrors();
+});
 
 var app = builder.Build();
 
