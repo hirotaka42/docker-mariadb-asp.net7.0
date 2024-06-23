@@ -9,7 +9,7 @@ namespace Bff.Contexts
         public ProductContext(DbContextOptions<ProductContext> options)
             : base(options)
         {
-            //Database.Migrate();
+            Database.Migrate();
         }
 
         public DbSet<Product> Products { get; set; }
